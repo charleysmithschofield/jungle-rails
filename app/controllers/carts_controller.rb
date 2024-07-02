@@ -1,6 +1,13 @@
 class CartsController < ApplicationController
 
   def show
+    # Check if cart is empty
+    if cart.empty?
+      @empty_message = "Your cart is empty."
+      @home_link = "Go to Home page"
+    else
+      @cart = cart
+    end
   end
 
   def add_item
