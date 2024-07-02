@@ -1,13 +1,47 @@
-<section class="orders-show">
+<section class="cart-show"> <!-- Applying cart-show styling -->
 
   <header class="page-header">
-    <h1>Order #<%= @order.id %></h1>
+    <h1>Order #<%= @order.id %></h1> <!-- Displaying the order number -->
   </header>
 
-  <div class="order-summary jumbotron">
-    <h4>Thank you for your order!</h4>
-  </div>
+  <% if @order.line_items.empty? %> <!-- Checking if there are no line items in the order -->
+    <div class="alert alert-info">
+      <p>This order is empty. <%= link_to "Continue Shopping", root_path %></p> <!-- Link to continue shopping -->
+    </div>
+  <% else %>
+    <div class="panel panel-default items">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th colspan="2">Product</th> <!-- Table header for product -->
+            <th>Unit Price</th> <!-- Table header for unit price -->
+            <th>Quantity</th> <!-- Table header for quantity -->
+            <th>Price</th> <!-- Table header for price -->
+          </tr>
+        </thead>
+        <tbody>
+          <% @order.line_items.each do |line_item| %> <!-- Iterating through each line item in the order -->
+            <%= render 'orders/order_item', line_item: line_item %> <!-- Rendering the _order_item partial for each line item -->
+          <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4">
+              TOTAL:
+            </th>
+            <th>
+              <%= humanized_money_with_symbol(@order.total_cents / 100.0) %> <!-- Displaying formatted total amount -->
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
 
-  <%= link_to "Continue Shopping", root_path, class: 'btn btn-lg btn-primary' %>
+    <div class="row">
+      <div class="col-xs-12">
+        <p><strong>Email Used:</strong> <%= @order.email %></p> <!-- Displaying the email used for the order -->
+      </div>
+    </div>
+  <% end %>
 
 </section>
