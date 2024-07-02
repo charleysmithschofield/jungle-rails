@@ -1,0 +1,12 @@
+<!-- app/views/orders/_order_item.html.erb -->
+
+<tr>
+  <td><%= image_tag(line_item.product.image_url, class: "img-fluid rounded-start") if line_item.product.image_url.present? %></td>
+  <td>
+    <h5><%= line_item.product.name %></h5>
+    <p><%= line_item.product.description %></p>
+  </td>
+  <td><%= number_to_currency(line_item.product.price) %></td>
+  <td><%= line_item.quantity %></td>
+  <td><%= number_to_currency(line_item.total_price) %></td>
+</tr>
