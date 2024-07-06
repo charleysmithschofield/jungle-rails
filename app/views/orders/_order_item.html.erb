@@ -6,7 +6,7 @@
     <h5><%= line_item.product.name %></h5>
     <p><%= line_item.product.description %></p>
   </td>
-  <td><%= number_to_currency(line_item.product.price) %></td>
+  <td><%= humanized_money_with_symbol(line_item.product.price) %></td>
   <td><%= line_item.quantity %></td>
-  <td><%= number_to_currency(line_item.total_price) %></td>
+  <td><%= humanized_money_with_symbol(line_item.total_price) %></td>
 </tr>
