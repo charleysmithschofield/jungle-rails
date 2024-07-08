@@ -24,6 +24,7 @@ to render.
 
 
 EDD to Create Sales Feature - Instructions:
+# SALES FEATURE (MINUS STATUS)
 1. Create route to admin/sales in routes.rb
   Error: No route matches [GET] "/admin/sales"
 
@@ -155,3 +156,10 @@ EDD to Create Sales Feature - Instructions:
     <% end %>
 
     * This should replace <%= render @sales %>
+
+
+# STATUS COLUMN INSTRUCTIONS
+Add the following to _sale.html.erb in place of the STATUS we currently have:
+<span class="label label-success">Active</span>
+<span class="label label-danger">Finished</span>
+<span class="label label-warning">Upcoming</span>
