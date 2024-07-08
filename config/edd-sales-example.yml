@@ -1,0 +1,157 @@
+Sales Example Instructions - Error Driven Development 
+
+* Web ref 1: https://web.compass.lighthouselabs.ca/p/web-flex-2/days/w24/activities/1101
+
+
+Approach:
+1. Ability for admins to create Sale records
+  - name
+  - percent_off
+  - starts_on (date)
+  - ends_on (date)
+  
+2. Once any sale is active, display it on the products#index page
+(home page) and affect the prices.
+
+
+Summary of Errors - General Steps:
+1. Routing Error - route to /admin/sales doesn't exist.
+2. Controller Error - Admin::SalesController doesn't exist.
+3. Action Error - action 'index' in Admin::SalesController not defined.
+4. View Error - no template in /views for /admin/sales for the controller
+to render.
+
+
+
+EDD to Create Sales Feature - Instructions:
+1. Create route to admin/sales in routes.rb
+  Error: No route matches [GET] "/admin/sales"
+
+  Error Explanation:
+  This error means there is no route for /admin/sales.
+  
+  Error Fix:
+  - We need to add the route to admin/sales to the routes.rb file.
+
+  - After we add the route we can use bin/rake routes to list all the routes in the app
+  to confirm the new route has been created.
+
+
+2. Create Controller for Sales:
+  Error: uninitialzed constant Admin::SalesController
+
+  Error Explanation:
+  This error means the Admin:SalesController doesn't exist. We need to go make the
+  controller for Admin::Sales.
+
+  Error Fix:
+  - Create this controller by running this rails command:
+
+    bin/rails g controller admin/sales
+  
+  - Go to sales_controller.rb in /controllers/admin
+
+
+3. Create the Action for the Admin::SalesController:
+  Error: The action 'index' could not be found for Admin::SalesController
+
+  Error Explanation:
+  This error means that there is no index action defined in the Admin::SalesController.
+
+  Error Fix:
+  - Define the index action in the Admin::Sales Controller. 
+
+
+4. Create Template (View) for Admin::SalesController:
+  Error: No template for interactive request. Admin::SalesController#index is
+  missing a template for request formats: text/html
+
+  Error Explanation:
+  This error means there is no HTML template in the views folder for the controller
+  to render.
+
+  Error Fix:
+  - Create the template for admin/sales:
+    
+    touch app/views/admin/sales/index.html.erb
+
+  - Even though our new HTML file is empty, the application will render the applications
+  standard index.html.erb in its place. 
+
+  - We can now add text to the sales/index.html.erb it will render on the admin/sales page. 
+  For this example we want the sales page to look very similar to the admin/products page, 
+  so we go to the index.html.erb for admin/products and we copy it intot he index.html.erb
+  for admin/sales.
+
+  - Make needed changes to make the new page about sales instead of products.
+
+
+5. Create Method for New Sale:
+  Error: NoMethodError in Admin::Sales#index
+
+  Error Explanation:
+  This error means that the path [:new, :admin, :sale] doesn't exist yet.
+
+  Error Fix:
+  - Go to routes.rb and add :new to the sales line:
+
+    resources :sales, only: [:index, :new]
+
+
+6. Create Sale Model:
+  Error: ArgumentError in Admin::Sales#index
+
+  Error Explanation:
+  This error is occuring b/c we are trying to render @sales in the sales page,
+  but @sales does not yet exist.
+
+  Error Fix:
+  - Go to sales_controller.rb and add @sales to the index.
+    @sales = Sale.all
+
+  - Create Sale Migration/Model by running this rails command in the terminal,
+    bin/rails g model sale name percent_off:integer starts_on:date ends_on:date 
+
+  - Go to sales migration file and run rake command,
+    bin/rake db:migrate
+
+  - This will still show us an empty table because currently our sales table in 
+  the db is empty. Checkout sale.rb.
+
+
+7. Create a Sale:
+  Error: no error message is displayed but our page is empty b/c we have no sales
+  for it to render.
+
+  Error Fix:
+  - In the terminal type,
+    bin/rails c
+
+  - This will take us into our environment to interact with the db using ActiveRecord.
+    Sale.first # nil b/c there are none
+
+    Sale.count # 0 b/c there are none
+
+    # This is an ActiveRecord create call
+    Sale.create! name: "X-Mas Sale!", starts_on: 'Dec 5th, 2024', ends_on: 'Jan 3rd 2025', percent_off: 50
+
+
+8. Create a Partial for the Sale:
+  Error: ActionView::MissingTemplate in Admin::Sales#index
+
+  Error Explanation:
+  There is no partial for the admin/sales.
+
+  Error Fix:
+  - Create a partial in app/views/admin/sales called _sale.html.erb,
+    touch app/views/admin/sales/_sale.html.erb
+
+    this should include a <tr> with multiple <td> inside it.
+    each <td> will be part of the sale record, one for name, starts_on, ends_on, etc.
+
+  - Update sales index.html.erb to loop through the sales when rendering
+    <% @sales.each do |s| %>
+      <%= render 'sale'. sale: s %>
+    <% end %>
+
+    * This should replace <%= render @sales %>
