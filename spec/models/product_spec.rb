@@ -3,15 +3,22 @@ require 'rails_helper'
 
 RSpec.describe Product, type: :model do
   describe 'Validations' do
-    it 'is valid with valid attributes' do
-      product = Product.new(name: 'Example Product', price: 10.99, quantity: 1, category: Category.new)
-      expect(product).to be_valid
+    it 'should validate presence of name' do
+      category = Category.create(name: 'Test Category')
+      product = Product.new(name: nil, price: 10, quantity: 5, category: category)
+      
+      product.valid?
+    
+      expect(product.errors.full_messages).to include("Name can't be blank")
     end
 
-    it 'is not valid without a name' do
-      product = Product.new(name: nil, price: 10.99, quantity: 1, category: Category.new)
+    it 'should validate presence of price' do
+      category = Category.create(name: 'Test Category')
+      product = Product.new(name: 'Test Product', price_cents: nil, quantity: 5, category: category)
+      
       product.valid?
-      expect(product.errors[:name]).to include("can't be blank")
+    
+      expect(product.errors.full_messages).to include("Price can't be blank")
     end
   end
 end
