@@ -20,5 +20,21 @@ RSpec.describe Product, type: :model do
     
       expect(product.errors.full_messages).to include("Price can't be blank")
     end
+    it 'should validate presence of quantity' do
+      category = Category.create(name: 'Test Category')
+      product = Product.new(name: 'Test Product', price: 10, quantity: nil, category: category)
+      
+      product.valid?
+    
+      expect(product.errors.full_messages).to include("Quantity can't be blank")
+    end
+    it 'should validate presence of category' do
+      category = Category.create(name: 'Test Category')
+      product = Product.new(name: 'Test Product', price: 10, quantity: 4, category: nil)
+      
+      product.valid?
+    
+      expect(product.errors.full_messages).to include("Category can't be blank")
+    end
   end
 end
