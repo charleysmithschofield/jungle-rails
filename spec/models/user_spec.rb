@@ -16,9 +16,21 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
 
-    # Test that a password and password_confirmation must match
+    # Test that a User password and password_confirmation must match
     it 'is invalid if password and password_confirmation do not match' do
       user = User.new(password: 'password', password_confirmation: 'different')
+      expect(user).to_not be_valid
+    end
+  end
+
+  # Test validation for email uniqueness
+  describe 'email' do
+    # Test that User email must be unique (case insensitive)
+    it 'is invalid with a duplicate email' do
+      # Create a user with a specific email
+      User.create(email: 'TEST@TEST.com', password: 'password', password_confirmation: 'password')
+      # Attempt to create another user with the same email
+      user = User.new(email: 'TEST@TEST.com', password: 'password', password_confirmation: 'password')
       expect(user).to_not be_valid
     end
   end
