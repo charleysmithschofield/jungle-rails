@@ -10,6 +10,12 @@ require 'rails_helper'
 #     end
 #   end
 # end
+
 RSpec.describe UsersHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe '#full_name' do
+    it 'returns the full name of the user' do
+      user = double('User', first_name: 'Test', last_name: 'User')
+      expect(helper.full_name(user)).to eq('Test User')
+    end
+  end
 end
