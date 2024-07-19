@@ -83,13 +83,25 @@ RSpec.describe User, type: :model do
       authenticated_user = User.authenticate_with_credentials('test@example.com', 'wrongpassword')
       expect(authenticated_user).to be_nil
     end
-    
+
      # Test unsuccessful authentication with incorrect email
      it 'returns nil when an incorrect email is provided' do
       User.create(email: 'test@example.com', password: 'password', password_confirmation: 'password', first_name: 'First', last_name: 'Last')
       authenticated_user = User.authenticate_with_credentials('wrong@example.com', 'password')
       expect(authenticated_user).to be_nil
     end
+   # Test authentication with email in different case
+    it 'returns a user when email case does not match' do
+      user = User.create(email: 'Test@Example.Com', password: 'password', password_confirmation: 'password', first_name: 'First', last_name: 'Last')
+      authenticated_user = User.authenticate_with_credentials('test@example.com', 'password')
+      expect(authenticated_user).to eq(user)
+    end
 
+    # Test authentication with email containing leading/trailing spaces
+    it 'returns a user when email contains leading/trailing spaces' do
+      user = User.create(email: 'test@example.com', password: 'password', password_confirmation: 'password', first_name: 'First', last_name: 'Last')
+      authenticated_user = User.authenticate_with_credentials('   test@example.com   ', 'password')
+      expect(authenticated_user).to eq(user)
+    end
   end
 end
