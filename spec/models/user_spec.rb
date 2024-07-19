@@ -34,4 +34,25 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
   end
+
+  # Testing presence validations for email, first_name, and last_name
+  describe 'presence validations' do
+    # Test that a User is invalid without an email
+    it 'is invalid without an email' do
+      user = User.new(email: nil, first_name: 'First', last_name: 'Last', password: 'password', password_confirmation: 'password')
+      expect(user).to_not be_valid
+    end
+
+    # Test that a User is invalid without a first_name
+    it 'is invalid without a first_name' do
+      user = User.new(email: 'test@example.com', first_name: nil, last_name: 'Last', password: 'password', password_confirmation: 'password')
+      expect(user).to_not be_valid
+    end
+
+    # Test that a User is invalid without a last_name
+    it 'is invalid without a last_name' do
+      user = User.new(email: 'test@example.com', first_name: 'First', last_name: nil, password: 'password', password_confirmation: 'password')
+      expect(user).to_not be_valid
+    end
+  end
 end
