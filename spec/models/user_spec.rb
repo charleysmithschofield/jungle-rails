@@ -35,7 +35,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  # Testing presence validations for email, first_name, and last_name
+  # Test presence validations for email, first_name, and last_name
   describe 'presence validations' do
     # Test that a User is invalid without an email
     it 'is invalid without an email' do
@@ -53,6 +53,19 @@ RSpec.describe User, type: :model do
     it 'is invalid without a last_name' do
       user = User.new(email: 'test@example.com', first_name: 'First', last_name: nil, password: 'password', password_confirmation: 'password')
       expect(user).to_not be_valid
+    end
+  end
+
+   # Testing password minimum length validation
+   describe 'password length' do
+    it 'is invalid if the password is too short' do
+      user = User.new(password: 'short', password_confirmation: 'short', email: 'TEST@TEST.com', first_name: 'First', last_name: 'Last')
+      expect(user).to_not be_valid
+    end
+
+    it 'is valid with a password of minimum length' do
+      user = User.new(password: 'longenough', password_confirmation: 'longenough', email: 'TEST@TEST.com', first_name: 'First', last_name: 'Last')
+      expect(user).to be_valid
     end
   end
 end
