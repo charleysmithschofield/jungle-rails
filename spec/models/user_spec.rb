@@ -15,5 +15,11 @@ RSpec.describe User, type: :model do
       user = User.new(password: 'password', password_confirmation: nil)
       expect(user).to_not be_valid
     end
+
+    # Test that a password and password_confirmation must match
+    it 'is invalid if password and password_confirmation do not match' do
+      user = User.new(password: 'password', password_confirmation: 'different')
+      expect(user).to_not be_valid
+    end
   end
 end
