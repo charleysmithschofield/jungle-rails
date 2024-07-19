@@ -10,6 +10,10 @@ RSpec.describe User, type: :model do
       expect(user).to_not be_valid
     end
 
-    
+    # Test that a User is invalid without a password_confirmation
+    it 'is invalid without a password_confirmation' do
+      user = User.new(password: 'password', password_confirmation: nil)
+      expect(user).to_not be_valid
+    end
   end
 end
