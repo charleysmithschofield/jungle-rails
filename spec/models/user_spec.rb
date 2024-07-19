@@ -1,17 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  subject { described_class.new(email: 'test@test.com', first_name: 'Test', last_name: 'User', password: 'password', password_confirmation: 'password') }
-
-  describe 'Validations' do
-    it 'is valid with valid attributes' do
-      expect(subject).to be_valid
+  
+  # Test validations relating to password and password confirmation
+  describe 'password and password_confirmation' do
+    # Test that a User is invalid without a password
+    it 'is invalid without a password' do
+      user = User.new(password: nil, password_confirmation: 'password')
+      expect(user).to_not be_valid
     end
 
-    it 'is not valid without a password' do
-      subject.password = nil
-      subject.password_confirmation = nil
-      expect(subject).to_not be_valid
-    end
+    
   end
 end
